@@ -1,0 +1,96 @@
+
+input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+ul li.pure-menu-item-customer {
+	background-color: red;
+}
+ul li.pure-menu-item-customer-add {
+	font-weight: bold;-
+}
+ul li.pure-menu-item-customer-add a {
+	color: white;
+}
+
+.pure-menu-link, .pure-menu-disabled, .pure-menu-heading {
+    padding: .9em 2em;
+}
+/*
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+}
+
+li {
+    float: left;
+}
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {//hover koymasam tüm menü sýrasý yeþil oluyor ama benim amacým sadece bir tanesini yeþil yapmak
+    background-color:  #4CAF50;//home dýþýndaki diðer herseyin rengi böyle ayarlanýyor
+
+}
+*/
+// aþagýda class olarak active tanýmladýgým home yeþil oldu
+.active {
+	background-color: #4CAF50;
+}
+
+
+.ui-datatable, .button-panel, .pure-menu {
+    width:90%; 
+    margin-left:5%; 
+    margin-right:5%;
+  }
+  
+ .ui-cell-editor-input .ui-calendar .ui-inputfield {
+  	width:70%; 
+  }
+  
+  .button-panel {
+  	text-align: right;
+  }
+  
+  .login-panel {
+  	
+  	
+  }
+  
+  .lockedPageImage {
+    background: url("../img/locked-doors.jpg") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    height: 300px;
+    width: 500px;
+    left: 21%;
+    position: absolute;
+    top: 40%;
+}
+
+.lockedPageText {
+	width: 800px;
+    left: 10%;
+    position: absolute;
+    top: 20%;
+    
+	font-weight:bold;
+	font-style:italic;
+	color:#F52F18;
+	font-size:37px;
+	text-align:center;
+	font-family:arial, helvetica, sans-serif;
+}
+  

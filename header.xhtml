@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<h:panelGroup rendered="#{userData.isAdmin()}">
+	<div class="pure-menu pure-menu-horizontal">
+		<ul class="pure-menu-list">
+			<li class="pure-menu-item pure-menu-selected"><a href="index.xhtml"
+				class="pure-menu-link">MyBiletix</a></li>
+				
+			<li class="pure-menu-item #{(page eq 'region') ? 'pure-menu-selected' : 'pure-menu-allow-hover'}"><a
+				href="region.xhtml" class="pure-menu-link">Region</a></li>
+				
+			<li class="pure-menu-item #{(page eq 'place') ? 'pure-menu-selected' : 'pure-menu-allow-hover'}"><a
+				href="place.xhtml" id="menuLink1" class="pure-menu-link">Place </a>
+			</li>
+			
+			<li class="pure-menu-item  #{(page eq 'user') ? 'pure-menu-selected' : 'pure-menu-allow-hover'}"><a
+				href="user.xhtml" id="menuLink1" class="pure-menu-link">User</a></li>
+				
+				
+			<li class="pure-menu-item  #{(page eq 'profile' or page eq 'changePassword' ) ? 'pure-menu-selected' : 'pure-menu-allow-hover'}"><a
+				href="profile.xhtml" id="menuLink1" class="pure-menu-link">Profile</a>
+				<ul class="pure-menu-children">
+	                <li class="pure-menu-item"><a href="changePassword.xhtml" class="pure-menu-link">Change Password</a></li>
+	            </ul>
+			</li>
+			
+			<li class="pure-menu-item  pure-menu-allow-hover"><a
+				href="logout.filter" id="menuLink1" class="pure-menu-link">Logout</a>
+			</li>
+		</ul>
+	</div>
+	</h:panelGroup>
+	
+	<h:panelGroup rendered="#{userData.isOrginizer()}">
+	<div class="pure-menu pure-menu-horizontal">
+		<ul class="pure-menu-list">
+			<li class="pure-menu-item pure-menu-selected"><a href="index.xhtml"
+				class="pure-menu-link">MyBiletix</a></li>
+			
+			<li class="pure-menu-item #{(page eq 'event') ? 'pure-menu-selected' : 'pure-menu-allow-hover'}"><a
+				href="event.xhtml" class="pure-menu-link">Event</a>
+			</li>	
+			
+			<li class="pure-menu-item  #{(page eq 'seat') ? 'pure-menu-selected' : 'pure-menu-allow-hover'}"><a
+				href="seat.xhtml" id="menuLink1" class="pure-menu-link">Seat</a>
+			</li>
+		
+			<li class="pure-menu-item  #{(page eq 'category') ? 'pure-menu-selected' : 'pure-menu-allow-hover'}"><a
+				href="category.xhtml" id="menuLink1" class="pure-menu-link">Category </a>
+			</li>
+				
+			<li class="pure-menu-item  #{(page eq 'profile' or page eq 'changePassword' ) ? 'pure-menu-selected' : 'pure-menu-allow-hover'}"><a
+				href="profile.xhtml" id="menuLink1" class="pure-menu-link">Profile</a>
+				<ul class="pure-menu-children">
+	                <li class="pure-menu-item"><a href="changePassword.xhtml" class="pure-menu-link">Change Password</a></li>
+	            </ul>
+			</li>
+			
+			<li class="pure-menu-item  pure-menu-allow-hover"><a
+				href="logout.filter" id="menuLink1" class="pure-menu-link">Logout</a>
+			</li>
+		</ul>
+	</div>
+	</h:panelGroup>
+	
+	<h:panelGroup rendered="#{userData.isCustomer()}">
+	<div class="pure-menu pure-menu-horizontal">
+		<ul class="pure-menu-list">
+			<li class="pure-menu-item pure-menu-selected"><a href="index.xhtml"
+				class="pure-menu-link">MyBiletix</a></li>
+				
+			
+			<li class="pure-menu-item  #{(page eq 'ticket') ? 'pure-menu-selected' : 'pure-menu-allow-hover'}"><a
+				href="ticket.xhtml" id="menuLink1" class="pure-menu-link">Ticket</a>
+			</li>
+				
+			<li class="pure-menu-item  #{(page eq 'address') ? 'pure-menu-selected' : 'pure-menu-allow-hover'}"><a
+				href="adress.xhtml" id="menuLink1" class="pure-menu-link">Address </a>
+			</li>
+				
+			<li class="pure-menu-item  #{(page eq 'profile' or page eq 'changePassword' ) ? 'pure-menu-selected' : 'pure-menu-allow-hover'}"><a
+				href="profile.xhtml" id="menuLink1" class="pure-menu-link">Profile</a>
+				<ul class="pure-menu-children">
+	                <li class="pure-menu-item"><a href="changePassword.xhtml" class="pure-menu-link">Change Password</a></li>
+	            </ul>
+			</li>
+			
+			<li class="pure-menu-item  pure-menu-allow-hover"><a
+				href="logout.filter" id="menuLink1" class="pure-menu-link">Logout</a>
+			</li>
+		</ul>
+	</div>
+	</h:panelGroup>
+		
+</ui:composition>

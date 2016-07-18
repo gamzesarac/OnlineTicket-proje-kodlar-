@@ -1,0 +1,169 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+   	template="template/pageTemplate.xhtml">
+   	
+   	<ui:param name="page" value="event" />
+   	
+<ui:define name="title">
+	Event
+</ui:define>
+    		
+<ui:define name="content">
+<h:panelGroup rendered="#{not userData.isOrginizer()}">
+		<div class="lockedPageText">
+			Bu sayfaya erişim yetkiniz yok
+		</div>
+		<div class="lockedPageImage"/>
+</h:panelGroup>
+
+<h:panelGroup rendered="#{userData.isOrginizer()}">
+<h:form id="form">
+
+	<p:growl id="growl" /> 
+
+  	<br/><br/>
+  	
+	<p:dataTable id="dataTable" var="event" value="#{eventBean.events}" rowKey="#{event.id}"
+	              reflow="true" rows="5" paginator="true" paginatorPosition="bottom" styleClass="center" editable="true">
+	              
+	    <p:ajax event="rowEdit" listener="#{eventBean.onRowEdit}" update=":form:growl :form:dataTable" />
+       	<p:ajax event="rowEditCancel" listener="#{eventBean.onRowCancel}" update=":form:growl :form:dataTable" />
+ 
+		<f:facet name="header">
+	          All Events
+        </f:facet>
+        
+        <p:column headerText="Id" sortBy="#{event.id}" style="width:5%">
+            <h:outputText value="#{event.id}" />
+        </p:column>
+        
+        	<p:column  headerText="Name">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{event.name}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{event.name}" required="true" label="Name" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="Detail">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{event.detail}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{event.detail}" required="true" label="Detail" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="Event Date">
+			<p:cellEditor>
+               <f:facet name="output">
+               		<h:outputText value="#{event.eventDate}" > 
+               			<f:convertDateTime pattern="dd-MM-yyyy" />
+               		</h:outputText></f:facet>
+               <f:facet name="input"><p:calendar value="#{event.eventDate}" showOn="button" pattern="dd-MM-yyyy" mask="true" 
+               label="Event date" required="true" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+
+		<p:column  headerText="Capacity">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{event.capacity}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{event.capacity}" required="true" label="Capacity" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+	
+		<p:column  headerText="EventType">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{event.eventType}" /></f:facet>
+               <f:facet name="input">
+	               <p:selectOneMenu id="eventType" value="#{event.eventType}" label="EventType" required="true">
+			            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+			            <f:selectItems value="#{eventBean.eventTypes}" />
+			        </p:selectOneMenu>
+               </f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="Place">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{event.place.name}" /></f:facet>
+               <f:facet name="input">
+	               <p:selectOneMenu id="place" value="#{eventBean.selectedPlace}" label="Place" required="true">
+			            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+			            <f:selectItems value="#{eventBean.places}" />
+			        </p:selectOneMenu>
+               </f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+
+		<p:column style="width:32px">
+           <p:rowEditor />
+        </p:column>
+        
+        <p:column style="width:32px;text-align: center"><!-- tabloyu ortaladım -->
+			
+             <p:commandButton action="#{eventBean.deleteEvent()}" icon="ui-icon-trash" title="Delete" update=":form:growl :form:dataTable">
+             	<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                <f:setPropertyActionListener value="#{event}" target="#{eventBean.event}" />
+            </p:commandButton>
+        </p:column>
+	
+	</p:dataTable>
+	<br/>
+	<p:outputPanel styleClass="button-panel">
+		<p:commandButton value="Add Event" type="button" onclick="PF('addEventPanel').show();" update=":panelForm" />
+    </p:outputPanel>
+	
+</h:form>
+
+<p:dialog header="Add New Event" widgetVar="addEventPanel" modal="true">
+	<h:form id="panelForm">
+    	<p:panelGrid columns="2">
+    	
+    	<p:outputLabel for="name" value="Name" />
+			<p:inputText id="name" value="#{eventBean.event.name}" label="Name" required="true" />
+			
+			<p:outputLabel for="detail" value="Detail" />
+			<p:inputText id="detail" value="#{eventBean.event.detail}" label="Detail" required="true" />
+			
+			<p:outputLabel for="eventDate" value="EventDate" />
+			<p:calendar id="eventDate" value="#{eventBean.event.eventDate}" showOn="button" pattern="dd-MM-yyyy" mask="true" label="Event date" required="true" />
+			
+    		<p:outputLabel for="capacity" value="Capacity" />
+			<p:inputText id="capacity" value="#{eventBean.event.capacity}" label="Capacity" required="true" />
+			
+			<p:outputLabel for="eventType" value="EventType" />
+			<p:selectOneMenu id="eventType" value="#{eventBean.event.eventType}" label="EventType" required="true">
+	            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+	            <f:selectItems value="#{eventBean.eventTypes}" />
+	        </p:selectOneMenu>
+			
+			<p:outputLabel for="place" value="Place" />
+			<p:selectOneMenu id="place" value="#{eventBean.selectedPlace}" label="Place" required="true">
+	            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+	            <f:selectItems value="#{eventBean.places}" />
+	        </p:selectOneMenu>
+			
+			<f:verbatim/>
+			<p:commandButton value="Add" oncomplete="handleDetailDialogComplete(xhr, status, args)" action="#{eventBean.addEvent()}" update=":form:growl :form:dataTable"/>
+		</p:panelGrid>
+	</h:form>
+		<script type="text/javascript">
+				function handleDetailDialogComplete(xhr, status, args) {
+					if (!(args.validationFailed || args.actionFailed)) {
+						PF('addEventPanel').hide();
+					}
+					return false;
+				}
+			</script>
+	</p:dialog> 
+	</h:panelGroup>
+</ui:define>
+</ui:composition>

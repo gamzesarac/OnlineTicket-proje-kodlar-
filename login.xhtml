@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view>
+	<h:head>
+
+		<title><ui:insert name="title">My Biletix </ui:insert></title>
+
+		<ui:include src="./template/meta.xhtml" />
+
+	</h:head>
+	<h:body>
+
+		<h:form id="form" class="pure-form pure-form-stacked">
+			<p:growl id="growl" />
+			<fieldset class="login-panel">
+				<legend>Login Form</legend>
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel for="username" value="Username:" />
+					<p:inputText id="username" value="#{loginBean.userName}"
+						placeholder="Requires user name" required="true" label="username" />
+
+					<p:outputLabel for="password" value="Password:" />
+					<p:password id="password" value="#{loginBean.password}"
+						placeholder="Requires password" required="true" label="password" />
+
+					<f:facet name="footer">
+						<p:commandButton value="Login" update="growl"
+							actionListener="#{loginBean.login}" />
+					</f:facet>
+				</h:panelGrid>
+			</fieldset>
+
+		</h:form>
+
+	</h:body>
+</f:view>
+</html>

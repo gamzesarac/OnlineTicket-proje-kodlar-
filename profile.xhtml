@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+   	template="template/pageTemplate.xhtml">
+   	
+<ui:param name="page" value="profile" />
+<ui:define name="title">
+	Profile
+</ui:define>
+    		
+<ui:define name="content">
+<h:form id="form">
+<p:growl id="growl" /> 
+
+<br/><br/>
+
+<p:panelGrid columns="2" >
+	<f:facet name="header">
+	          Update profile
+    </f:facet>
+			
+	<p:outputLabel for="userName" value="User Name" />
+	<p:outputLabel id="userName" value="#{profileBean.user.userName}"/>
+	
+	<p:outputLabel for="name" value="Name" />
+	<p:inputText id="name" value="#{profileBean.user.name}" label="Name" required="true" />
+	
+	<p:outputLabel for="surname" value="SurName" />
+	<p:inputText id="surname" value="#{profileBean.user.surname}" label="SurName" required="true" />
+	
+	<p:outputLabel for="email" value="Email" />
+	<p:inputText id="email" value="#{profileBean.user.email}" label="Email" required="true" validatorMessage="Invalid email format" >
+		<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+	</p:inputText>
+	
+	<p:outputLabel for="birthDate" value="Birth date" />
+	<p:calendar id="birthDate" value="#{profileBean.user.birthDate}" showOn="button" pattern="dd-MM-yyyy" mask="true" 
+               label="Birth date" required="true" />
+	
+</p:panelGrid>
+
+<p:commandButton value="Update" action="#{profileBean.updateProfile()}" update=":form:growl"/>
+	
+</h:form>
+</ui:define>
+</ui:composition>
+
+

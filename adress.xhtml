@@ -1,0 +1,137 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+   	template="template/pageTemplate.xhtml">
+   	
+   	
+   	
+<ui:define name="title">
+	Adress Information
+</ui:define>
+    		
+<ui:define name="content">
+
+
+<h:panelGroup rendered="#{not userData.isCustomer()}">
+		<div class="lockedPageText">
+			Bu sayfaya erişim yetkiniz yok!
+		</div>
+		<div class="lockedPageImage"/>
+</h:panelGroup>
+
+<h:panelGroup rendered="#{userData.isCustomer()}">
+
+<h:form id="form">
+
+	<p:growl id="growl" /> 
+
+  	<br/><br/>
+  	
+	<p:dataTable id="dataTable" var="adress" value="#{adressBean.adresses}" rowKey="#{adress.id}"
+	              reflow="true" rows="5" paginator="true" paginatorPosition="bottom" styleClass="center" editable="true">
+	              
+	    <p:ajax event="rowEdit" listener="#{adressBean.onRowEdit}" update=":form:growl :form:dataTable" />
+       	<p:ajax event="rowEditCancel" listener="#{adressBean.onRowCancel}" update=":form:growl :form:dataTable" />
+ 
+		<f:facet name="header">
+	          All Adresses
+        </f:facet>
+        
+        <p:column headerText="Id" sortBy="#{adress.id}" style="width:5%">
+            <h:outputText value="#{adress.id}" />
+        </p:column>
+
+		<p:column  headerText="Name">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{adress.name}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{adress.name}" required="true" label="Name" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="City">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{adress.city.name}" /></f:facet>
+               <f:facet name="input">
+	               <p:selectOneMenu id="city" value="#{adressBean.selectedCity}" required="true">
+			            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+			            <f:selectItems value="#{adressBean.cities}" />
+			        </p:selectOneMenu>
+	       	  </f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="PostCode">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{adress.postCode}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{adress.postCode}" required="true" label="PostCode" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="Adress">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{adress.adress}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{adress.adress}" required="true" label="Adress" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+
+		<p:column style="width:32px">
+           <p:rowEditor />
+        </p:column>
+        
+        <p:column style="width:32px;text-align: center"><!-- tabloyu ortaladım -->
+			
+             <p:commandButton action="#{adressBean.deleteAdress()}" icon="ui-icon-trash" title="Delete" update=":form:growl :form:dataTable">
+             	<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                <f:setPropertyActionListener value="#{adress}" target="#{adressBean.adress}" />
+            </p:commandButton>
+        </p:column>
+	
+	</p:dataTable>
+	<br/>
+	<p:outputPanel styleClass="button-panel">
+		<p:commandButton value="Add Adress" type="button" onclick="PF('addAdressPanel').show();" update=":panelForm" />
+    </p:outputPanel>
+	
+</h:form>
+
+<p:dialog header="Add New Adress" widgetVar="addAdressPanel" modal="true">
+	<h:form id="panelForm">
+    	<p:panelGrid columns="2">
+    		<p:outputLabel for="name" value="Adress name" />
+			<p:inputText id="name" value="#{adressBean.adress.name}" label="Name" required="true" />
+			
+	        <p:outputLabel for="city" value="City" />
+			<p:selectOneMenu id="city" value="#{adressBean.selectedCity}" required="true">
+	            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+	            <f:selectItems value="#{adressBean.cities}" />
+	        </p:selectOneMenu>
+			
+			<p:outputLabel for="postCode" value="PostCode" />
+			<p:inputText id="postCode" value="#{adressBean.adress.postCode}" label="Post Code" required="true" />
+			
+			<p:outputLabel for="adress" value="Adress" />
+			<p:inputText id="adress" value="#{adressBean.adress.adress}" label="Adress" required="true" />
+			<f:verbatim/>
+			<p:commandButton value="Add" oncomplete="handleDetailDialogComplete(xhr, status, args)" action="#{adressBean.addAdress()}" update=":form:growl :form:dataTable"/>
+		</p:panelGrid>
+	</h:form>
+		<script type="text/javascript">
+				function handleDetailDialogComplete(xhr, status, args) {
+					if (!(args.validationFailed || args.actionFailed)) {
+						PF('addAdressPanel').hide();
+					}
+					return false;
+				}
+			</script>
+	</p:dialog>
+</h:panelGroup>
+ 
+
+</ui:define>
+</ui:composition>

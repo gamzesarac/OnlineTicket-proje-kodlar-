@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+   	template="template/pageTemplate.xhtml">
+   	
+   	<ui:param name="page" value="place" />
+   	
+<ui:define name="title">
+	Place
+</ui:define>
+    		
+<ui:define name="content">
+<h:panelGroup rendered="#{not userData.isAdmin()}">
+		<div class="lockedPageText">
+			Bu sayfaya erişim yetkiniz yok!
+		</div>
+		<div class="lockedPageImage"/>
+</h:panelGroup>
+
+<h:panelGroup rendered="#{userData.isAdmin()}">
+<h:form id="form">
+
+	<p:growl id="growl" /> 
+
+  	<br/><br/>
+  	
+	<p:dataTable id="dataTable" var="place" value="#{placeBean.places}" rowKey="#{place.id}"
+	              reflow="true" rows="5" paginator="true" paginatorPosition="bottom" styleClass="center" editable="true">
+	              
+	    <p:ajax event="rowEdit" listener="#{placeBean.onRowEdit}" update=":form:growl :form:dataTable" />
+       	<p:ajax event="rowEditCancel" listener="#{placeBean.onRowCancel}" update=":form:growl :form:dataTable" />
+ 
+		<f:facet name="header">
+	          All Places
+        </f:facet>
+        
+        <p:column headerText="Id" sortBy="#{place.id}" style="width:5%">
+            <h:outputText value="#{place.id}" />
+        </p:column>
+
+		<p:column  headerText="Name">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{place.name}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{place.name}" required="true" label="Name" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="City">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{place.city.name}" /></f:facet>
+               <f:facet name="input">
+	               <p:selectOneMenu id="city" value="#{placeBean.selectedCity}" label="City" required="true">
+			            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+			            <f:selectItems value="#{placeBean.cities}" />
+			        </p:selectOneMenu>
+               </f:facet>
+           </p:cellEditor>
+		</p:column>
+		
+		<p:column  headerText="Adress">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{place.adress}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{place.adress}" required="true" label="Adress" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="Orginizer">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{place.orginizer.name}" /></f:facet>
+               <f:facet name="input">
+               	<p:selectOneMenu id="orginizer" value="#{placeBean.selectedOrginizer}" label="Orginizer" required="true">
+		            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+		            <f:selectItems value="#{placeBean.orginizers}" />
+		        </p:selectOneMenu>
+               </f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+
+		<p:column style="width:32px">
+           <p:rowEditor />
+        </p:column>
+        
+        <p:column style="width:32px;text-align: center"><!-- tabloyu ortaladım -->
+			
+             <p:commandButton action="#{placeBean.deletePlace()}" icon="ui-icon-trash" title="Delete" update=":form:growl :form:dataTable">
+             	<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                <f:setPropertyActionListener value="#{place}" target="#{placeBean.place}" />
+            </p:commandButton>
+        </p:column>
+	
+	</p:dataTable>
+	<br/>
+	<p:outputPanel styleClass="button-panel">
+		<p:commandButton value="Add Place" type="button" onclick="PF('addPlacePanel').show();" update=":panelForm" />
+    </p:outputPanel>
+	
+</h:form>
+
+<p:dialog header="Add New Place" widgetVar="addPlacePanel" modal="true">
+	<h:form id="panelForm">
+    	<p:panelGrid columns="2">
+    		<p:outputLabel for="name" value="Place Name" />
+			<p:inputText id="name" value="#{placeBean.place.name}" label="Name" required="true" />
+			
+			<p:outputLabel for="city" value="City" />
+			<p:selectOneMenu id="city" value="#{placeBean.selectedCity}" label="City" required="true">
+	            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+	            <f:selectItems value="#{placeBean.cities}" />
+	        </p:selectOneMenu>
+	        
+			<p:outputLabel for="address" value="Adress" />
+			<p:inputText id="address" value="#{placeBean.place.adress}" label="Adress" required="true" />
+			
+			<p:outputLabel for="orginizer" value="Orginizer" />
+			<p:selectOneMenu id="orginizer" value="#{placeBean.selectedOrginizer}" required="true">
+	            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+	            <f:selectItems value="#{placeBean.orginizers}" />
+	        </p:selectOneMenu>
+	 
+			<f:verbatim/>
+			<p:commandButton value="Add" oncomplete="handleDetailDialogComplete(xhr, status, args)" action="#{placeBean.addPlace()}" update=":form:growl :form:dataTable"/>
+		</p:panelGrid>
+	</h:form>
+		<script type="text/javascript">
+				function handleDetailDialogComplete(xhr, status, args) {
+					if (!(args.validationFailed || args.actionFailed)) {
+						PF('addPlacePanel').hide();
+					}
+					return false;
+				}
+			</script>
+	</p:dialog> 
+	</h:panelGroup>
+</ui:define>
+</ui:composition>

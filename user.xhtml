@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+   	template="template/pageTemplate.xhtml">
+   	
+<ui:param name="page" value="user" /> 
+
+
+<ui:define name="title">
+	User
+</ui:define>
+    		
+<ui:define name="content">
+
+<h:panelGroup rendered="#{not userData.isAdmin()}">
+		<div class="lockedPageText">
+			Bu sayfaya erişim yetkiniz yok!
+		</div>
+		<div class="lockedPageImage"/>
+</h:panelGroup>
+
+<h:panelGroup rendered="#{userData.isAdmin()}">
+
+<h:form id="form">
+
+	<p:growl id="growl" /> 
+
+  	<br/><br/>
+  	
+	<p:dataTable id="dataTable" var="user" value="#{userBean.users}" rowKey="#{user.id}"
+	              reflow="true" rows="5" paginator="true" paginatorPosition="bottom" styleClass="center" editable="true">
+	              
+	    <p:ajax event="rowEdit" listener="#{userBean.onRowEdit}" update=":form:growl :form:dataTable" />
+       	<p:ajax event="rowEditCancel" listener="#{userBean.onRowCancel}" update=":form:growl :form:dataTable" />
+ 
+		<f:facet name="header">
+	          All Users
+        </f:facet>
+        
+        <p:column headerText="Id" sortBy="#{user.id}" style="width:5%">
+            <h:outputText value="#{user.id}" />
+        </p:column>
+
+		<p:column  headerText="Name">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{user.name}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{user.name}" required="true" label="Name" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="SurName">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{user.surname}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{user.surname}" required="true" label="SurName" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="E-mail">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{user.email}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{user.email}" required="true" label="Email" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="Password">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{user.password}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{user.password}" required="true" label="Password" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+		<p:column  headerText="Type">
+			<p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{user.type}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{user.type}" required="true" label="Type" /></f:facet>
+           </p:cellEditor>
+			
+		</p:column>
+		
+
+		<p:column style="width:32px">
+           <p:rowEditor />
+        </p:column>
+        
+        <p:column style="width:32px;text-align: center"><!-- tabloyu ortaladım -->
+			
+             <p:commandButton action="#{userBean.deleteUser()}" icon="ui-icon-trash" title="Delete" update=":form:growl :form:dataTable">
+             	<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                <f:setPropertyActionListener value="#{user}" target="#{userBean.user}" />
+            </p:commandButton>
+        </p:column>
+	
+	</p:dataTable>
+	<br/>
+	<p:outputPanel styleClass="button-panel">
+		<p:commandButton value="Add User" type="button" onclick="PF('addUserPanel').show();" update=":panelForm" />
+    </p:outputPanel>
+	
+</h:form>
+
+<p:dialog header="Add New User" widgetVar="addUserPanel" modal="true">
+	<h:form id="panelForm">
+    	<p:panelGrid columns="2">
+    		<p:outputLabel for="name" value="User name" />
+			<p:inputText id="name" value="#{userBean.user.name}" label="Name" required="true" />
+			
+			<p:outputLabel for="surname" value="User surname" />
+			<p:inputText id="surname" value="#{userBean.user.surname}" label="surName" required="true" />
+			
+			<p:outputLabel for="email" value="Email" />
+			<p:inputText id="email" value="#{userBean.user.email}" label="email" required="true" />
+			
+			<p:outputLabel for="password" value="Password" />
+			<p:inputText id="password" value="#{userBean.user.password}" label="password" required="true" />
+			
+			<p:outputLabel for="type" value="Type" />
+			<p:inputText id="type" value="#{userBean.user.type}" label="type" required="true" />
+			
+			
+			<f:verbatim/>
+			<p:commandButton value="Add" oncomplete="handleDetailDialogComplete(xhr, status, args)" action="#{userBean.addUser()}" update=":form:growl :form:dataTable"/>
+		</p:panelGrid>
+	</h:form>
+		<script type="text/javascript">
+				function handleDetailDialogComplete(xhr, status, args) {
+					if (!(args.validationFailed || args.actionFailed)) {
+						PF('addUserPanel').hide();
+					}
+					return false;
+				}
+			</script>
+	</p:dialog>
+</h:panelGroup>
+ 
+</ui:define>
+</ui:composition>
+
+	

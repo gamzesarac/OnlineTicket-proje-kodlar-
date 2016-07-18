@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+   	template="template/pageTemplate.xhtml">
+   	
+<ui:define name="title">
+	Register
+</ui:define>
+    		
+<ui:define name="content">
+<h:form id="form">
+<p:growl id="growl" /> 
+
+<br/><br/>
+
+<p:panelGrid columns="2" >
+	<f:facet name="header">
+	          Create New Account
+    </f:facet>
+			
+	<p:outputLabel for="userName" value="User Name" />
+	<p:inputText id="userName" value="#{registerBean.user.userName}" label="User Name" required="true" />
+	
+	<p:outputLabel for="name" value="Name" />
+	<p:inputText id="name" value="#{registerBean.user.name}" label="Name" required="true" />
+	
+	<p:outputLabel for="surname" value="SurName" />
+	<p:inputText id="surname" value="#{registerBean.user.surname}" label="SurName" required="true" />
+	
+	<p:outputLabel for="email" value="Email" />
+	<p:inputText id="email" value="#{registerBean.user.email}" label="Email" required="true" />
+	
+	<p:outputLabel for="password" value="Password" />
+	<p:inputText id="password" value="#{registerBean.user.password}" label="Password" required="true" />
+	
+	<p:outputLabel for="confirmPassword" value="Confirm Password" />
+	<p:inputText id="confirmPassword" value="#{registerBean.confirmPassword}" label="Password" required="true" />
+	
+	<p:outputLabel for="birthDate" value="Birth date" />
+	<p:calendar id="birthDate" value="#{registerBean.user.birthDate}" showOn="button" pattern="dd-MM-yyyy" mask="true" 
+               label="Birth date" required="true" />
+	
+</p:panelGrid>
+
+<p:commandButton value="Add" action="#{registerBean.registerUser()}" update=":form:growl"/>
+	
+</h:form>
+			
+</ui:define>
+</ui:composition>
