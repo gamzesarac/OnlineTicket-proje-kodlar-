@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+   	template="template/pageTemplate.xhtml">
+   	
+   	<ui:param name="page" value="event" />
+   	
+<ui:define name="title">
+	Purchase Ticket
+</ui:define>
+    		
+<ui:define name="content">
+<h:form id="form">
+
+	<p:growl id="growl" /> 
+
+  	<br/><br/>
+  	
+  	<p:panelGrid columns="2">
+    	
+    	<p:outputLabel for="name" value="Name" />
+		<p:outputLabel id="name" value="#{purchaseTicketBean.event.name}" label="Name" required="true" />
+		
+		<p:outputLabel for="detail" value="Detail" />
+		<p:outputLabel id="detail" value="#{purchaseTicketBean.event.detail}" label="Detail" required="true" />
+		
+		<p:outputLabel for="eventDate" value="EventDate" />
+		<p:outputLabel id="eventDate" value="#{purchaseTicketBean.event.eventDate}" > 
+         	<f:convertDateTime pattern="dd-MM-yyyy" />
+        </p:outputLabel>
+		
+		<p:outputLabel for="eventType" value="EventType" />
+		<p:outputLabel id="eventType" value="#{purchaseTicketBean.event.eventType}" />
+			
+		<p:outputLabel for="place" value="Place" />
+		<p:outputLabel id="place" value="#{purchaseTicketBean.event.place.name}" />
+
+	</p:panelGrid>			
+	
+	<p:panel >
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel for="category" value="Category: " />
+            <p:selectOneMenu id="category" value="#{purchaseTicketBean.selectedCategory}" >
+	            <p:ajax listener="#{purchaseTicketBean.onCategoryChange}" update="seat" />
+	            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+	            <f:selectItems value="#{purchaseTicketBean.categories}" />
+	        </p:selectOneMenu>
+	        
+            <p:outputLabel for="seat" value="Seat: " />
+            <p:selectOneMenu id="seat" value="#{purchaseTicketBean.selectedSeat}" style="width:150px">
+                <f:selectItem itemLabel="Select Seat" itemValue="" noSelectionOption="true" />
+                <f:selectItems value="#{purchaseTicketBean.seats}" />
+            </p:selectOneMenu>
+        </h:panelGrid>
+ 
+        <p:separator />
+
+    </p:panel>
+    <p:commandButton value="Add"  action="#{purchaseTicketBean.addTicket()}" update=":form:growl "/>
+</h:form>
+
+
+</ui:define>
+</ui:composition>

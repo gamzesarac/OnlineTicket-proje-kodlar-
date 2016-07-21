@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+   	template="template/pageTemplate.xhtml">
+   	
+   	<ui:param name="page" value="ticket" />
+<ui:define name="title">
+	Tickets
+</ui:define>
+    		
+<ui:define name="content">
+<h:panelGroup rendered="#{not userData.isCustomer()}">
+		<div class="lockedPageText">
+			Bu sayfaya erişim yetkiniz yok
+		</div>
+		<div class="lockedPageImage"/>
+</h:panelGroup>
+
+<h:panelGroup rendered="#{userData.isCustomer()}">
+<h:form id="form">
+
+	<p:growl id="growl" /> 
+
+  	<br/><br/>
+  	
+	<p:dataTable id="dataTable" var="ticket" value="#{ticketBean.tickets}" rowKey="#{ticket.id}"
+	              reflow="true" rows="5" paginator="true" paginatorPosition="bottom" styleClass="center">
+	              
+ 
+		<f:facet name="header">
+	          Tickets
+        </f:facet>
+        
+        <p:column headerText="Id" sortBy="#{ticket.id}" style="width:5%">
+            <h:outputText value="#{ticket.id}" />
+        </p:column>
+
+		<p:column  headerText="Purchase Date">
+			<h:outputText value="#{ticket.puchaseDate}" > 
+             	<f:convertDateTime pattern="dd-MM-yyyy" />
+             </h:outputText>
+		</p:column>
+		
+		<p:column  headerText="Event">
+               <h:outputText value="#{ticket.event.name}" />
+		</p:column>
+		
+		<p:column  headerText="Category">
+			<h:outputText value="#{ticket.category.name}" />
+		</p:column>
+		
+		<p:column  headerText="Seat">
+			<h:outputText value="#{ticket.seat.number}" />
+		</p:column>
+		
+		<p:column  headerText="Statu">
+			<h:outputText value="#{ticket.statu}" />
+		</p:column>
+		
+		<p:column style="width:32px;text-align: center">
+			
+             <p:commandButton action="#{ticketBean.cancelTicket()}" icon="ui-icon-trash" title="Cancel" 
+             update=":form:growl :form:dataTable" disabled="#{ticket.statu ne 'ACTIVE'}">
+             	<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                <f:setPropertyActionListener value="#{ticket}" target="#{ticketBean.ticket}" />
+            </p:commandButton>
+        </p:column>
+		
+	</p:dataTable>
+	<br/>
+	
+	
+</h:form>
+
+</h:panelGroup>
+</ui:define>
+</ui:composition>

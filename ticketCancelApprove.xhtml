@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+   	template="template/pageTemplate.xhtml">
+   	
+   	<ui:param name="page" value="ticketCancelApprove" />
+<ui:define name="title">
+	Tickets Cancel Approve
+</ui:define>
+    		
+<ui:define name="content">
+<h:panelGroup rendered="#{not userData.isAdmin()}">
+		<div class="lockedPageText">
+			Bu sayfaya erişim yetkiniz yok
+		</div>
+		<div class="lockedPageImage"/>
+</h:panelGroup>
+
+<h:panelGroup rendered="#{userData.isAdmin()}">
+<h:form id="form">
+
+	<p:growl id="growl" /> 
+
+  	<br/><br/>
+  	
+	<p:dataTable id="dataTable" var="ticket" value="#{ticketCancelApproveBean.tickets}" rowKey="#{ticket.id}"
+	              reflow="true" rows="5" paginator="true" paginatorPosition="bottom" styleClass="center">
+	              
+ 
+		<f:facet name="header">
+	          Tickets
+        </f:facet>
+        
+        <p:column headerText="Id" sortBy="#{ticket.id}" style="width:5%">
+            <h:outputText value="#{ticket.id}" />
+        </p:column>
+
+		<p:column  headerText="Purchase Date">
+			<h:outputText value="#{ticket.puchaseDate}" > 
+             	<f:convertDateTime pattern="dd-MM-yyyy" />
+             </h:outputText>
+		</p:column>
+		
+		<p:column  headerText="Event" >
+               <h:outputText value="#{ticket.event.name}" />
+		</p:column>
+		
+		<p:column  headerText="Category" >
+			<h:outputText value="#{ticket.category.name}" />
+		</p:column>
+		
+		<p:column  headerText="Seat" style="width:5%">
+			<h:outputText value="#{ticket.seat.number}" />
+		</p:column>
+		
+		<p:column  headerText="Customer">
+			<h:outputText value="#{ticket.user.name}" />
+		</p:column>
+		
+		<p:column >
+			
+             <p:commandButton action="#{ticketCancelApproveBean.approve(true)}" value="Approve" title="Approve" 
+             	update=":form:growl :form:dataTable">
+             	<p:confirm header="Confirmation" message="Are you sure to approve?" icon="ui-icon-alert" />
+                <f:setPropertyActionListener value="#{ticket}" target="#{ticketCancelApproveBean.ticket}" />
+            </p:commandButton>
+            
+           
+        </p:column>
+		<p:column >
+		 <p:commandButton action="#{ticketCancelApproveBean.approve(false)}" value="Reject" title="Reject" 
+             	update=":form:growl :form:dataTable">
+             	<p:confirm header="Confirmation" message="Are you sure to reject?" icon="ui-icon-alert" />
+                <f:setPropertyActionListener value="#{ticket}" target="#{ticketCancelApproveBean.ticket}" />
+            </p:commandButton>
+            </p:column>
+	</p:dataTable>
+	<br/>
+	
+	
+</h:form>
+
+</h:panelGroup>
+</ui:define>
+</ui:composition>
