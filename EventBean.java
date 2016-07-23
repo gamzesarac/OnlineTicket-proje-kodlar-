@@ -45,8 +45,10 @@ public class EventBean extends AbstractBeanBase {
 		placeMap = new HashMap<String, Place>();
 		places = new ArrayList<String>();
 		placeDao = new PlaceDao(EntityManagerSingleton.getInstance());
-		List<Place> placeList = placeDao.findAll();
-		for (Place place : placeList) {
+		//giriş yapan orginizer'a kayıtlı olan placeler ekleniyor
+		UserData userData = (UserData) getSession(false).getAttribute(Constants.USER_DATA);
+		User user = userData.getUser();
+		for (Place place : user.getPlaces()) {
 			placeMap.put(place.getName(), place);
 			places.add(place.getName());
 		}
