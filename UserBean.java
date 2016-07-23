@@ -39,6 +39,27 @@ public class UserBean extends AbstractBeanBase {
 		}
 	}
 	
+	//update password kodu
+	public void updatePassword(){
+		User user2 = userDao.findUserByUserNameAndPassword(user.getName(), password);
+		if(user2!=null){
+		if (!confirmPassword.equals(confirmPassword2)) {
+			addMessage(FacesMessage.SEVERITY_ERROR, "Passwords are not equal", null);			
+		}
+		else{
+			UserData userData = (UserData) getSession(false).getAttribute(Constants.USER_DATA);
+			user = userData.getUser();
+			user.setPassword(getConfirmPassword());
+			userDao.update(user);
+			addMessage("Password Changed");
+		}
+		}
+		else{
+			addMessage("Old Password is wrong");
+		}
+		
+	}
+	
 	public String registerUser() {
 		user.setType(UserType.CUSTOMER.getValue());
 		boolean succesfull = addUser();
