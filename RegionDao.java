@@ -14,7 +14,8 @@ public class RegionDao {
 	public RegionDao(EntityManager em) {
 		this.em = em;
 	}
-
+/**
+ * Finds all regions from DB*/
 	@SuppressWarnings("unchecked")
 	public List<Region> findAllRegion() {
 		Query query = em.createNativeQuery("select * from region", Region.class);

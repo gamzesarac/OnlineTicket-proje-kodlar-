@@ -37,7 +37,7 @@ public class AdressBean extends AbstractBeanBase {
 	@PostConstruct
 	public void init() {
 		adressDao = new AdressDao(EntityManagerSingleton.getInstance());
-		adresses = adressDao.findAllAdresses();
+		adresses = adressDao.findAddressesByUser(userData.getUser());
 		
 		cityDao = new CityDao(EntityManagerSingleton.getInstance());
 		cityMap = new HashMap<String, City>();
@@ -69,7 +69,9 @@ public class AdressBean extends AbstractBeanBase {
 		adress = new Adress();
 		addMessage("deleteAdress");
 	}
-	
+	/**
+	 * All address information is updated.
+	 * */
 	public void onRowEdit(RowEditEvent event) {
         Adress adress = (Adress) event.getObject();
         

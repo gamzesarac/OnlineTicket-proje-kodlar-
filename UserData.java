@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.mybiletix.entity.User;
 import com.mybiletix.enumaration.UserType;
-
+/**Gets user*/
 public class UserData implements Serializable {
 
 	private static final long serialVersionUID = 1L;

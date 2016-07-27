@@ -8,7 +8,8 @@ public class EntityManagerSingleton {
 	
 	private static EntityManager instance = null;
     private EntityManagerSingleton() { }
-
+/**
+ * All DB operations is done by using EntityManager*/
     public static synchronized EntityManager getInstance() {
         if (instance == null) {
         	EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "MyBiletix" );

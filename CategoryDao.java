@@ -6,9 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.mybiletix.entity.Category;
-import com.mybiletix.entity.User;
-import com.mybiletix.enumaration.UserType;
-
+import com.mybiletix.entity.Event;
 
 
 public class CategoryDao {
@@ -42,12 +40,12 @@ public class CategoryDao {
 		em.merge(category);
 		em.getTransaction().commit();
 	}
-
+/**
+ * Finds categories by using event*/
 	@SuppressWarnings("unchecked")
-	public List<Category> findCategories() {
-		Query query = em.createNativeQuery("select * from category", Category.class);
+	public List<Category> findCategoriesByEvent(Event event) {
+		Query query = em.createNativeQuery("select * from category where event_id=" + event.getId(), Category.class);
 		return query.getResultList();
-		
 	}
 
 

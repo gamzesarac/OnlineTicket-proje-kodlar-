@@ -15,6 +15,8 @@ private EntityManager em;
 		this.em = em;
 	}
 	
+/**
+ * Finds cities from DB*/
 	public List<City> findAll() {
 		TypedQuery<City> query = em.createNamedQuery("City.findAll", City.class);
 		return query.getResultList();

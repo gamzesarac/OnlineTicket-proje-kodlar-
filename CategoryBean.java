@@ -16,8 +16,6 @@ import com.mybiletix.dao.EntityManagerSingleton;
 import com.mybiletix.dao.EventDao;
 import com.mybiletix.entity.Category;
 import com.mybiletix.entity.Event;
-import com.mybiletix.entity.Place;
-import com.mybiletix.entity.User;
 
 @ManagedBean
 @ViewScoped
@@ -30,7 +28,7 @@ public class CategoryBean extends AbstractBeanBase {
 	private Map<String, Event> eventMap;
 	private List<String> events;
 	private String selectedEvent;
-	
+
 	@PostConstruct
 	public void init() {
 		categoryDao = new CategoryDao(EntityManagerSingleton.getInstance());
@@ -46,7 +44,10 @@ public class CategoryBean extends AbstractBeanBase {
 		}
 		category = new Category();
 	}
-	
+	/**
+	 * Event which selected from comboBox,sets category object.All category object's is added to DB,system. 
+	 * If adding is successfull,the messages are shown in the screen.
+	 * */
 	public void addCategory() {
 		Event event = eventMap.get(selectedEvent);
 		category.setEvent(event);
@@ -57,14 +58,19 @@ public class CategoryBean extends AbstractBeanBase {
 		selectedEvent = "";
 		addMessage("addCategory");
 	}
-
+/**
+ * Category is deleted from DB
+ * If deleting is succesfull,the message is shown in the secreen.
+ * */
 	public void deleteCategory() {
 		categoryDao.delete(category);
 		categories.remove(category);
 		category = new Category();
 		addMessage("deleteCategory");
 	}
-	
+	/**
+	 * Category is updated.
+	 * New event is selected from comboBox, and another attributes and event are updated. */
 	public void onRowEdit(RowEditEvent evnt) {
 		Category category = (Category) evnt.getObject();
 		

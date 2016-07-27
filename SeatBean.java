@@ -40,14 +40,17 @@ public class SeatBean extends AbstractBeanBase {
 		categoryDao = new CategoryDao(EntityManagerSingleton.getInstance());
 		categoryMap = new HashMap<String, Category>();
 		categories = new ArrayList<String>();
-		List<Category> categoryList = categoryDao.findCategories();
+		List<Category> categoryList = categoryDao.findAllCategories();
 		for (Category category : categoryList) {
-			categoryMap.put(category.getName(), category);
-			categories.add(category.getName());
+			String key = category.getEvent().getName() + " - " + category.getName();
+			categoryMap.put(key, category);
+			categories.add(key);
 		}
 		seat = new Seat();
 	}
-	
+	/** 
+	 * Selected category is selected from map and set  category this to seat.
+	 * And then seat is added to DB and web site*/
 	public void addSeat() {
 		Category category = categoryMap.get(selectedCategory);
 		seat.setCategory(category);
@@ -64,7 +67,10 @@ public class SeatBean extends AbstractBeanBase {
 		seat = new Seat();
 		addMessage("deleteSeat");
 	}
-	
+	/**
+	 * If orginizer enters wrong seat to the system,
+	 * orginizer can update this information.
+	 * First orginizer select one selectedCategory and all seat information is updated*/
 	public void onRowEdit(RowEditEvent event) {
 		Seat seat = (Seat) event.getObject();
 		Category category = categoryMap.get(selectedCategory);

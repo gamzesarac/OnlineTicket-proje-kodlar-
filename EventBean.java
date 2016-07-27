@@ -45,10 +45,8 @@ public class EventBean extends AbstractBeanBase {
 		placeMap = new HashMap<String, Place>();
 		places = new ArrayList<String>();
 		placeDao = new PlaceDao(EntityManagerSingleton.getInstance());
-		//giriş yapan orginizer'a kayıtlı olan placeler ekleniyor
-		UserData userData = (UserData) getSession(false).getAttribute(Constants.USER_DATA);
-		User user = userData.getUser();
-		for (Place place : user.getPlaces()) {
+		List<Place> placeList = placeDao.findPlacesByOrginizer(getLogedInUser());
+		for (Place place : placeList) {
 			placeMap.put(place.getName(), place);
 			places.add(place.getName());
 		}
@@ -59,7 +57,11 @@ public class EventBean extends AbstractBeanBase {
 		}
 		
 	}
-	
+	/**
+	 * If there is an event in one place,another event can not be in this place in same date.
+	 * Place Availability is controlled.
+	 *  If place is empty orginizer can add new event in this place.
+	 *   */
 	public void addEvent() {
 		Place place = placeMap.get(selectedPlace);
 		if (eventDao.isPlaceAvailable(place, event.getEventDate(), null) == false) {
@@ -83,7 +85,12 @@ public class EventBean extends AbstractBeanBase {
 		event = new Event();
 		addMessage("deleteEvent");
 	}
-	
+	/**
+	 * All event information is updated
+	 * Place Availability is controlled.
+	 * If one place is not empty in that date,another event does not added.
+	 * So in updating this information is controlled.Updating is not done.
+	 * */
 	public void onRowEdit(RowEditEvent evnt) {
 		Event event = (Event) evnt.getObject();
 		
@@ -104,7 +111,7 @@ public class EventBean extends AbstractBeanBase {
 		selectedPlace = "";
 
 		addMessage("Event Edited");
-        
+         
     }
      
     public void onRowCancel(RowEditEvent event) {

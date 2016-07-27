@@ -1,5 +1,6 @@
 package com.mybiletix;
-
+/**
+ * All Constants are defined*/
 public class Constants {
 
 	public static final String USER_DATA = "userData";
@@ -10,5 +11,6 @@ public class Constants {
 	public static final String LOGIN_PAGE = "login.xhtml";
 	public static final String RESOURCE_PATH = "javax.faces.resource";
 	public static final String REGISTER_SCREEN = "register.xhtml";
+	public static final String EVENT_DETAIL_SCREEN = "eventDetail.xhtml";
 
 }

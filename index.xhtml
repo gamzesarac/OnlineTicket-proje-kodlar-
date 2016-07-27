@@ -20,45 +20,53 @@
 <div class="body_wrapper">
   <div class="center">
     <div class="header_area">
-      <div class="logo floatleft"><h1>MyBiletix</h1></div>
+      <div class="logo floatleft"><h1>Online Ticket</h1></div>
       <div class="top_menu floatright">
         <ul>
         <h:panelGroup rendered="#{empty userData}">
           <li><a href="register.xhtml">Register</a></li>
           <li><a href="login.xhtml">Log in</a></li>
+          <br/><br/><br/>
         </h:panelGroup>
         <h:panelGroup rendered="#{not empty userData}">
           <li>#{userData.screenName}</li>
           <li><a href="profile.xhtml">MyAccount</a></li>
           <li><a href="logout.filter">logout</a></li>
+          <br/><br/><br/>
         </h:panelGroup>
-        <br/>
-        <br/>
-        <!-- regioni table ile ortaladım -->
-        <table>
-         <tr>
-         <td>
-           <p:outputLabel for="region" value="All Regions " style="width:100px" />
-         </td>
-         <td>
-            <p:selectOneMenu id="region" value="#{mainScreenBean.regionId}" style="width:200px">
-            	<p:ajax update="@all" />
-                <f:selectItem itemLabel="Select One" itemValue="" />
+        <h:form> 
+           <p:outputLabel for="region" value="Select Regions: " /><br/>
+            <p:selectOneMenu id="region" value="#{mainScreenBean.region}" style="width:150px">
+            	<p:ajax update="@all" listener="#{mainScreenBean.refreshData()}" />
+                <f:selectItem itemLabel="All Region" itemValue="" />
                 <f:selectItems  value="#{mainScreenBean.regions}"/>
                  </p:selectOneMenu>
-             </td>
-           </tr>
-        </table>
+          </h:form> 
         </ul>
       </div>
  </div>
     <div class="main_menu_area" >
       <ul id="nav" style="margin-left:250px">
-        <li><a href="index.xhtml">HOME</a></li>
-        <li><a href="index.xhtml?event_type=MUSIC">MUSIC</a></li>
-        <li><a href="index.xhtml?event_type=SPORT">SPORT</a></li>
-        <li><a href="index.xhtml?event_type=PERFORMING_ARTS">Performing Arts</a>
-        </li>
+      	<li>
+      		<p:commandLink action="#{mainScreenBean.refreshData()}" value="HOME" update="@all" >
+			   	<f:setPropertyActionListener value="" target="#{mainScreenBean.eventType}"></f:setPropertyActionListener>
+			</p:commandLink>
+      	</li>
+      	<li>
+      		<p:commandLink action="#{mainScreenBean.refreshData()}" value="MUSIC" update="@all" >
+			   	<f:setPropertyActionListener value="MUSIC" target="#{mainScreenBean.eventType}"></f:setPropertyActionListener>
+			</p:commandLink>
+      	</li>
+      	<li>
+      		<p:commandLink action="#{mainScreenBean.refreshData()}" value="SPORT" update="@all" >
+			   	<f:setPropertyActionListener value="SPORT" target="#{mainScreenBean.eventType}"></f:setPropertyActionListener>
+			</p:commandLink>
+      	</li>
+      	<li>
+      		<p:commandLink action="#{mainScreenBean.refreshData()}" value="PERFORMING ARTS" update="@all" >
+			   	<f:setPropertyActionListener value="PERFORMING_ARTS" target="#{mainScreenBean.eventType}"></f:setPropertyActionListener>
+			</p:commandLink>
+      	</li>
       </ul>
     </div>
     <h:panelGroup rendered="#{!mainScreenBean.filtered}">
@@ -75,15 +83,10 @@
     <div class="content_area">
             <h2 class="title" style="text-align:center" >Hot Tickets</h2>   
 <h:form> 
-    <p:dataScroller value="#{mainScreenBean.events}" var="event" chunkSize="5">
-        
- 
-        <f:facet name="loader">
-            <p:commandButton type="button" value="More" icon="ui-icon-circle-triangle-s"/>
-        </f:facet>
- 
+
+	<p:repeat value="#{mainScreenBean.events}" var="event">
         <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
-            <img src="res/img/#{event.eventType}.gif" alt="" title=""/>
+            <a href="eventDetail.xhtml?event_id=#{event.id}" ><img src="res/img/#{event.eventType}.gif" alt="" title=""/></a>
  
             <p:outputPanel>
                 <h:panelGrid columns="2" cellpadding="5">
@@ -100,12 +103,12 @@
                 </h:panelGrid>
             </p:outputPanel>
         </h:panelGrid>
-    </p:dataScroller>
+        <hr />
+    </p:repeat>
 </h:form>
   </div>
 </div>
 </div>
-<script type="text/javascript" src="assets/js/jquery-min.js"></script> 
 <script type="text/javascript" src="assets/js/bootstrap.min.js"></script> 
 <script type="text/javascript" src="assets/js/jquery.bxslider.js"></script> 
 <script type="text/javascript" src="assets/js/selectnav.min.js"></script> 

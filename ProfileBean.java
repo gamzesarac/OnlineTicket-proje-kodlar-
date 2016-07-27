@@ -4,8 +4,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import com.mybiletix.Constants;
-import com.mybiletix.UserData;
 import com.mybiletix.dao.EntityManagerSingleton;
 import com.mybiletix.dao.UserDao;
 import com.mybiletix.entity.User;
@@ -19,14 +17,12 @@ public class ProfileBean extends AbstractBeanBase {
 	@PostConstruct
 	public void init() {
 		userDao = new UserDao(EntityManagerSingleton.getInstance());
-		UserData userData = (UserData) getSession(false).getAttribute(Constants.USER_DATA);
-		user = userData.getUser();//login olmuþ olan user
+		user = getLogedInUser();
 	}
 	
 	public void updateProfile() {
 		
-		// TODO check email validation
-		// TODO check email on db
+		
 		userDao.update(user);
 		addMessage("Profile Edited");
 	}

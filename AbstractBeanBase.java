@@ -1,4 +1,4 @@
-package bean;
+package com.mybiletix.bean;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -7,11 +7,12 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import entity.User;
+import com.mybiletix.Constants;
+import com.mybiletix.UserData;
+import com.mybiletix.entity.User;
 
 public abstract class AbstractBeanBase {
 	
-
 	public void addMessage(String summary) {
 		addMessage(summary, null);
 	}
@@ -49,6 +50,6 @@ public abstract class AbstractBeanBase {
 	
 	public User getLogedInUser() {
 		UserData userData = (UserData) getSession(false).getAttribute(Constants.USER_DATA);
-		return userData.getUser();//login olmuÅŸ olan user
+		return userData.getUser();//login olmuþ olan user
 	}
 }

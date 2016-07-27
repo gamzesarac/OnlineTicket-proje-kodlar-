@@ -35,9 +35,7 @@ public class RegisterBean extends AbstractBeanBase {
 		
 		}
 		
-		// TODO check email
-		// TODO check user name on db
-		// TODO check email on db
+		
 		
 		userDao.persist(user);
 		return Constants.LOGIN_PAGE;

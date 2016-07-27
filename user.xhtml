@@ -77,8 +77,13 @@
 		
 		<p:column  headerText="Type">
 			<p:cellEditor>
-               <f:facet name="output"><h:outputText value="#{user.type}" /></f:facet>
-               <f:facet name="input"><p:inputText value="#{user.type}" required="true" label="Type" /></f:facet>
+               <f:facet name="output"><h:outputText value="#{user.typeName}" /></f:facet>
+               <f:facet name="input">
+	               <p:selectOneMenu id="type" value="#{user.type}" label="Type" required="true">
+			            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+			            <f:selectItems value="#{userBean.userTypes}" />
+			        </p:selectOneMenu>
+               </f:facet>
            </p:cellEditor>
 			
 		</p:column>
@@ -120,8 +125,10 @@
 			<p:inputText id="password" value="#{userBean.user.password}" label="password" required="true" />
 			
 			<p:outputLabel for="type" value="Type" />
-			<p:inputText id="type" value="#{userBean.user.type}" label="type" required="true" />
-			
+			<p:selectOneMenu id="type" value="#{userBean.user.type}" label="Type" required="true">
+	            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+	            <f:selectItems value="#{userBean.userTypes}" />
+	        </p:selectOneMenu>
 			
 			<f:verbatim/>
 			<p:commandButton value="Add" oncomplete="handleDetailDialogComplete(xhr, status, args)" action="#{userBean.addUser()}" update=":form:growl :form:dataTable"/>

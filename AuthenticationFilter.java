@@ -38,6 +38,7 @@ public class AuthenticationFilter implements Filter {
 
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
+	 * Session is gets and filters
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
@@ -54,6 +55,12 @@ public class AuthenticationFilter implements Filter {
 		}
 		
 		if (currentUrl.contains(Constants.REGISTER_SCREEN)) {
+			// ignore resources
+			chain.doFilter(request, response);
+			return;
+		}
+		
+		if (currentUrl.contains(Constants.EVENT_DETAIL_SCREEN)) {
 			// ignore resources
 			chain.doFilter(request, response);
 			return;

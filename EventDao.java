@@ -50,7 +50,11 @@ public class EventDao {
 		Query query = em.createNativeQuery("select * from event",Event.class);
 		return query.getResultList();
 	}
-	
+	/**
+	 * Finds events by getting event type and region
+	 * In main screen searching is done by using eventTypes and regions
+	 * */
+	@SuppressWarnings("unchecked")
 	public List<Event> findEvents(String eventType, Integer regionId) {
 		String selectSql = "select * from event ";
 				
@@ -58,14 +62,16 @@ public class EventDao {
 			selectSql += "join place on event.place_id = place.id "
 					+ "join city on place.city_id = city.id "
 					+ "join region on city.region_id = region.id "
-					+ "where event_type='" + eventType + "' and region.id = " + regionId;
+					+ "where event_type='" + eventType + "' and region.id = " + regionId + " order by event_date desc";
 		} else if (eventType != null && !eventType.equals("")) {
-			selectSql += " where event_type='" + eventType + "'";
+			selectSql += " where event_type='" + eventType + "' order by event_date desc";
 		} else if (regionId != null) {
 			selectSql += "join place on event.place_id = place.id "
 					+ "join city on place.city_id = city.id "
 					+ "join region on city.region_id = region.id "
-					+ "where region.id=" + regionId;
+					+ "where region.id=" + regionId + " order by event_date desc";
+		} else {
+			selectSql += " order by event_date desc";
 		}
 
 		Query query = em.createNativeQuery(selectSql, Event.class);
@@ -91,14 +97,18 @@ public class EventDao {
 		em.merge(event);
 		em.getTransaction().commit();
 	}
-
+/**
+ * Finds all events from DB
+ * */
 	@SuppressWarnings("unchecked")
 	public List<Event> findEvents() {
 		Query query = em.createNativeQuery("select * from event" , Event.class);
 		return query.getResultList();
 		
 	}
-
+/**
+ * In same date and in same place there is not any event more than 1
+ * This controlled is provided.*/
 	public boolean isPlaceAvailable(Place place, Date eventDate, Integer currentInstantId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Event> query = cb.createQuery(Event.class);
@@ -118,6 +128,10 @@ public class EventDao {
 		} catch (NoResultException e) {
 			return true;
 		}
+	}
+/**Finds events by using eventId*/
+	public Event findEventById(Integer eventId) {
+		return em.find(Event.class, eventId);
 	}
 
 }

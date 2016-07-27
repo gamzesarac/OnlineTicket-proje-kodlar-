@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.event.RowEditEvent;
 
-import com.mybiletix.Constants;
 import com.mybiletix.dao.EntityManagerSingleton;
 import com.mybiletix.dao.UserDao;
 import com.mybiletix.entity.User;
@@ -31,6 +29,9 @@ public class UserBean extends AbstractBeanBase {
 	public void init() {
 		userDao = new UserDao(EntityManagerSingleton.getInstance());
 		users = userDao.findAllUsers();
+		for (User u: users) {
+			u.findTypeName();
+		}
 		user = new User();
 		
 		userTypes = new ArrayList<>();
@@ -38,50 +39,10 @@ public class UserBean extends AbstractBeanBase {
 			userTypes.add(new SelectItem(userType.getValue(), userType.name()));
 		}
 	}
-	
-	//update password kodu
-	public void updatePassword(){
-		User user2 = userDao.findUserByUserNameAndPassword(user.getName(), password);
-		if(user2!=null){
-		if (!confirmPassword.equals(confirmPassword2)) {
-			addMessage(FacesMessage.SEVERITY_ERROR, "Passwords are not equal", null);			
-		}
-		else{
-			UserData userData = (UserData) getSession(false).getAttribute(Constants.USER_DATA);
-			user = userData.getUser();
-			user.setPassword(getConfirmPassword());
-			userDao.update(user);
-			addMessage("Password Changed");
-		}
-		}
-		else{
-			addMessage("Old Password is wrong");
-		}
-		
-	}
-	
-	public String registerUser() {
-		user.setType(UserType.CUSTOMER.getValue());
-		boolean succesfull = addUser();
-		if (succesfull) {
-			return Constants.LOGIN_PAGE;
-		} else {
-			return null;
-		}
-	}
-	
+
 	public boolean addUser() {
-		if (!user.getPassword().equals(confirmPassword)) {
-			addMessage(FacesMessage.SEVERITY_ERROR, "Passwords are not equal", null);
-			return false;
-		}
-		
-		// TODO check email
-		
-		// TODO check user name on db
-		// TODO check email on db
-		
 		userDao.persist(user);
+		user.findTypeName();
         users.add(user);
         user = new User();
 		addMessage("addUser");
@@ -96,7 +57,8 @@ public class UserBean extends AbstractBeanBase {
 	}
 	
 	public void onRowEdit(RowEditEvent event) {
-		userDao.update(user);
+		userDao.update((User) event.getObject());
+		user.findTypeName();
 		addMessage("User Edited");
         
     }

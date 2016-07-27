@@ -1,7 +1,11 @@
 package com.mybiletix.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import com.mybiletix.enumaration.UserType;
+
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +37,9 @@ public class User implements Serializable {
 
 	private Integer type;
 
+	@Transient
+	private String typeName;
+	
 	@Column(name="user_name")
 	private String userName;
 
@@ -45,6 +52,10 @@ public class User implements Serializable {
 	private List<Place> places;
 
 	public User() {
+		
+	}
+	public void findTypeName() {
+		typeName = UserType.findNameByValue(type);
 	}
 
 	public Integer getId() {
@@ -153,6 +164,14 @@ public class User implements Serializable {
 		place.setOrginizer(null);
 
 		return place;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 
 }

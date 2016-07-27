@@ -13,7 +13,7 @@ import javax.persistence.criteria.Root;
 import com.mybiletix.entity.User;
 import com.mybiletix.entity.User_;
 import com.mybiletix.enumaration.UserType;
-
+/**Gets user*/
 public class UserDao {
 private EntityManager em;
 	
@@ -44,20 +44,23 @@ private EntityManager em;
 		em.merge(user);
 		em.getTransaction().commit();
 	}
-
+/**
+ * Finds orginizers from DB*/
 	@SuppressWarnings("unchecked")
 	public List<User> findOrginizers() {
 		Query query = em.createNativeQuery("select * from user where type = " + UserType.ORGINIZER.getValue(), User.class);
 		return query.getResultList();
 	}
 	
-	
+	/**
+	 * Finds customers from DB*/	
 	@SuppressWarnings("unchecked")
 	public List<User> findCustomers() {
 		Query query = em.createNativeQuery("select * from user where type = " + UserType.CUSTOMER.getValue(), User.class);
 		return query.getResultList();
 	}
-
+	/**
+	 * Finds users by using userName and password from DB*/
 	public User findUserByUserNameAndPassword(String userName, String password) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<User> query = cb.createQuery(User.class);

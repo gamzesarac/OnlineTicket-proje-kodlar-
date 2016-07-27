@@ -50,7 +50,7 @@
 		
 		<p:column  headerText="Category">
 			<p:cellEditor>
-               <f:facet name="output"><h:outputText value="#{seat.category.name}" /></f:facet>
+               <f:facet name="output"><h:outputText value="#{seat.category.event.name} - #{seat.category.name}" /></f:facet>
                <f:facet name="input">
                	<p:selectOneMenu id="category" value="#{seatBean.selectedCategory}" required="true">
 		            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
